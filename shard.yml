@@ -1,8 +1,9 @@
 name: resp-server
-version: 0.1.0
+version: 0.1.1
 
 authors:
   - Hugo Abonizio <hugo_abonizio@hotmail.com>
+  - Green-Edge <support@green-edge.net>
 
 crystal: 0.22.0
 

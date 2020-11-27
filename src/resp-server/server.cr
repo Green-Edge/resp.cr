@@ -1,29 +1,29 @@
+require "log"
 require "socket"
 
 module RESP
   class Server
-    def initialize(@port = 6379)
-      @server = TCPServer.new("127.0.0.1", @port)
+    Log = ::Log.for(self)
+    @running = false
+
+    def initialize(@host = "0.0.0.0", @port : String | Int32 = 6379)
+      @server = TCPServer.new(@host, @port.to_i)
+      Log.debug {"#{self.class}: service listen on #{@host}:#{@port}"}
     end
 
     def listen(&block : RESP::Connection ->)
-      loop do
-        socket = @server.accept
-        spawn do
-          connection = Connection.new(socket)
-          loop do
-            begin
-              block.call(connection)
-            rescue ex
-              puts ex
-              break
-            end
-          end
-        end
+      while socket = @server.accept?
+        spawn process(socket, block)
       end
     end
 
-    def process(socket, &block)
+    def process(socket, block)
+      connection = Connection.new(socket)
+      begin
+        block.call(connection)
+      rescue ex
+        Log.debug {"#{self.class}: error: #{ex}"}
+      end
     end
   end
 end

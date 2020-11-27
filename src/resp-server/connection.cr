@@ -24,7 +24,7 @@ module RESP
           arguments = array[1..-1]
         end
       end
-      @socket.skip(2)
+
       [operation, arguments]
     end
 
