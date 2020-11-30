@@ -22,7 +22,7 @@ module RESP
       begin
         block.call(connection)
       rescue ex
-        Log.debug {"#{self.class}: error: #{ex}"}
+        Log.error {"#{self.class}: error: #{ex}"}
       end
     end
   end
